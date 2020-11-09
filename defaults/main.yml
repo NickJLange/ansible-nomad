@@ -5,7 +5,13 @@ nomad_mirror: https://releases.hashicorp.com/nomad
 nomad_os: linux
 nomad_arch: amd64
 
-nomad_install_dir: /usr/local/bin
+nomad_user: root
+nomad_group: root
+
+nomad_install_dir: /opt/nomad/
+nomad_system_conf_dir: /usr/local/etc/
+nomad_data_dir: /var/lib/nomad/data/
+systemd_dir: /etc/systemd/system
 
 nomad_checksums:
   # https://releases.hashicorp.com/nomad/0.9.3/nomad_0.9.3_SHA256SUMS

@@ -1,0 +1,48 @@
+---
+###############################################################################
+################################# INSTALL #####################################
+###############################################################################
+
+- stat:
+    path: "{{ nomad_system_conf_dir }}"
+  register: installed_ok
+  tags:
+    - nomad_systemd
+
+
+###############################################################################
+################################ CONFIGURE ####################################
+###############################################################################
+
+- block:
+  - name: configure nomad for systemd
+    template:
+      src: nomad.service.j2
+      dest: "{{ systemd_dir }}/nomad.service"
+      mode: 0644
+    notify: reload systemd
+
+  - name: configure nomad
+    template:
+      src: nomad-client.config.j2
+      dest: "{{nomad_system_conf_dir}}/nomad.config"
+      mode: 0600
+      owner: "{{nomad_user}}"
+      group: "{{nomad_group}}"
+    notify: restart nomad
+
+#  - name: register vault with consul
+#    template:
+#      src: vault-consul.json.j2
+#      dest: /etc/consul/vault-consul.json
+#      mode: 0644
+
+  - name: enable nomad
+    service:
+      name: nomad
+      enabled: yes
+      state: started
+
+  become: yes
+  become_user: "{{nomad_user}}"
+  tags: nomad_systemd
