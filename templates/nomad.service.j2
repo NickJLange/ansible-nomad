@@ -1,0 +1,15 @@
+[Unit]
+Description=Runs Nomad server
+Documentation=https://www.nomadproject.io/
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User={{ nomad_user }}
+Group={{ nomad_group }}
+ExecStart={{ nomad_install_dir }}/nomad agent -config {{nomad_system_conf_dir}}/nomad.config
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target

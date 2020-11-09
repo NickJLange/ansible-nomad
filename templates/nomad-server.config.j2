@@ -1,0 +1,47 @@
+
+
+
+server {
+  enabled = true
+  bootstrap_expect = 1
+}
+
+client {
+  enabled = true
+  network_speed = 10
+}
+
+data_dir  = "{{ nomad_data_dir }}"
+
+
+datacenter = "{{ nomad_datacenter }}"
+
+bind_addr = "0.0.0.0"
+
+ports {
+  http = 4646
+  rpc  = 4647
+  serf = 4648
+}
+
+acl {
+  enabled    = false
+  token_ttl  = "30s"
+  policy_ttl = "60s"
+}
+
+plugin "raw_exec" {
+  config {
+    enabled = true
+  }
+}
+
+
+
+telemetry {
+  publish_allocation_metrics = true
+  publish_node_metrics       = true
+  datadog_address = "localhost:8125"
+  disable_hostname = true
+  collection_interval = "10s"
+}
